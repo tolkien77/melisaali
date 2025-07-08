@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>🎀 Melisa'nın Oyun Sitesi 🎀</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Müzik çalar için CSS kodları */
+    .muzik-oynatici-container {
+      background-color: #fce4ec; /* Açık pembe */
+      border: 2px solid #ff80ab; /* Koyu pembe çerçeve */
+      padding: 15px 20px;
+      margin: 20px auto; /* Üstten ve alttan boşluk, yatayda ortala */
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 15px; /* Daha yuvarlak köşeler */
+      max-width: 400px; /* Maksimum genişlik ile ortalamayı daha iyi göster */
+      box-sizing: border-box; /* Padding ve border genişliğe dahil */
+    }
+    #sarkiAdi {
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #e91e63; /* Koyu pembe */
+      margin-bottom: 10px;
+    }
+    /* KONTROL BUTONLARI İÇİN DÜZENLEME */
+    .kontroller {
+      display: flex; /* Flexbox kullanarak butonları yan yana hizala */
+      justify-content: center; /* Butonları yatayda ortala */
+      align-items: center; /* Dikeyde ortala (eğer farklı yükseklikte olurlarsa) */
+      gap: 10px; /* Butonlar arasına boşluk ekle */
+      margin-bottom: 10px; /* Butonlar ile ses seviyesi arasına boşluk */
+    }
+    .kontroller button {
+      background-color: #ff80ab; /* Pembe buton */
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px; /* Yuvarlak butonlar */
+      cursor: pointer;
+      font-size: 1em;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      white-space: nowrap; /* Buton metninin tek satırda kalmasını sağlar */
+    }
+    .kontroller button:hover {
+      background-color: #e91e63; /* Koyu pembe hover */
+      transform: translateY(-2px); /* Hafif yukarı kayma efekti */
+    }
+    .kontroller button:active {
+        transform: translateY(0); /* Tıklamada geri gelme efekti */
+        box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    audio {
+      display: none; /* HTML5 varsayılan oynatıcısını gizliyoruz */
+    }
+
+    /* Ses seviyesi sürgüsü için stiller */
+    .ses-seviyesi-kontrol {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        color: #e91e63;
+        font-weight: bold;
+    }
+    .ses-seviyesi-kontrol input[type="range"] {
+        width: 150px;
+        -webkit-appearance: none; /* Varsayılan tarayıcı stilini kaldır */
+        height: 8px;
+        border-radius: 5px;
+        background: #ffcdd2; /* Açık pembe arka plan */
+        outline: none;
+        transition: opacity .2s;
+    }
+    .ses-seviyesi-kontrol input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #e91e63; /* Koyu pembe başlık */
+        cursor: pointer;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .ses-seviyesi-kontrol input[type="range"]::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #e91e63;
+        cursor: pointer;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    /* Profil resminin altındaki yazıyı gizlemek için */
+    .resim-kutusu {
+      position: relative;
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+  <div class="header-left">
+    <button class="home-btn" onclick="showHome()">🏠Ana Sayfa</button>
+  </div>
+  <span class="melisa-title">🎀 Melisa'nın Oyun Sitesi 🎀</span>
+  <div class="header-btns">
+    <button class="theme-btn" id="rainbow-btn" onclick="toggleRainbowTheme()" title="Gökkuşağı Teması">🌈</button>
+<button class="theme-btn" id="fenerbahce-btn" onclick="toggleFenerbahceTheme()" title="Fenerbahçe Teması">⭐</button>
+    <button class="mode-btn" id="mode-btn" onclick="toggleMode()" title="Gece/Gündüz Modu">🌙</button>
+  </div>
+</header>
+<div class="resim-kutusu">
+  <img src="resim.jpg" alt="Profil" id="profilResmi">
+</div>
+  <nav id="main-nav">
+    <button onclick="selectGame('color-match')" id="btn-color-match" class="nav-game-btn" data-emoji="🎨">🎨<span>Renk Eşleştirme</span></button>
+    <button onclick="selectGame('balloon')" id="btn-balloon" class="nav-game-btn" data-emoji="🎈">🎈<span>Balon Patlatma</span></button>
+    <button onclick="selectGame('animal')" id="btn-animal" class="nav-game-btn" data-emoji="🐶">🐶<span>Hayvan Bulma</span></button>
+    <button onclick="selectGame('memory')" id="btn-memory" class="nav-game-btn" data-emoji="🃏">🃏<span>Hafıza Oyunu</span></button>
+    <button onclick="selectGame('xox')" id="btn-xox" class="nav-game-btn" data-emoji="❌⭕">❌⭕<span>XOX</span></button>
+    <button onclick="selectGame('sudoku')" id="btn-sudoku" class="nav-game-btn" data-emoji="🌿">🌿<span>Sudoku</span></button>
+    <button onclick="selectGame('maze')" id="btn-maze" class="nav-game-btn" data-emoji="🌀">🌀<span>Labirent</span></button>
+    <button onclick="selectGame('flood')" id="btn-flood" class="nav-game-btn" data-emoji="🌈">🌈<span>Renk Doldurma</span></button>
+  </nav>
+
+  <div class="muzik-oynatici-container">
+    <div id="sarkiAdi"></div>
+    <audio id="sesOynatici"></audio>
+    <div class="kontroller">
+        <button id="oncekiBtn">⬅️ Önceki</button>
+        <button id="oynatDurdurBtn">🎵 Oynat</button>
+        <button id="sonrakiBtn">Sonraki ➡️</button>
+    </div>
+    <div class="ses-seviyesi-kontrol">
+        <span>🔇</span>
+        <input type="range" id="sesSeviyesi" min="0" max="1" step="0.01" value="0.5">
+        <span>🔊</span>
+    </div>
+  </div>
+  <main>
+    <section class="game-section active" id="section-home">
+         <div class="melisa-welcome-box">
+        <div class="melisa-avatar">👱‍♀️</div>
+        <div>
+          <h2>Hoş geldin Melisa! 🎀</h2>
+          <div class="melisa-welcome-msg">Burada eğlenceli oyunlar seni bekliyor!</div>
+        </div>
+      </div>
+      <div class="home-game-list">
+        <div class="home-game-card"><span class="home-game-emoji">🎨</span>
+          <div class="home-game-title">Renk Eşleştirme</div>
+          <div class="home-game-desc">Aynı renkli kutuları bulup eşleştir.</div>
+        </div>
+        <div class="home-game-card"><span class="home-game-emoji">🎈</span>
+          <div class="home-game-title">Balon Patlatma</div>
+          <div class="home-game-desc">Balonları 1'den 20'ye sırayla patlat.</div>
+        </div>
+        <div class="home-game-card"><span class="home-game-emoji">🐶</span>
+          <div class="home-game-title">Hayvan Bulma</div>
+          <div class="home-game-desc">Doğru hayvanı resimlerden seç.</div>
+        </div>
+        <div class="home-game-card"><span class="home-game-emoji">🃏</span>
+          <div class="home-game-title">Hafıza Oyunu</div>
+          <div class="home-game-desc">Eş olan kartları bul.</div>
+        </div>
+        <div class="home-game-card"><span class="home-game-emoji">❌⭕</span>
+          <div class="home-game-title">XOX</div>
+          <div class="home-game-desc">Sırayla X ve O koy, üçlü yap veya bilgisayara karşı oyna.</div>
+        </div>
+        <div class="home-game-card"><span class="home-game-emoji">🌿</span>
+          <div class="home-game-title">Sudoku</div>
+          <div class="home-game-desc">Rakamları doğru yerleştir.</div>
+        </div>
+        <div class="home-game-card"><span class="home-game-emoji">🌀</span>
+          <div class="home-game-title">Labirent</div>
+          <div class="home-game-desc">Ok tuşları ile karakteri çıkışa ulaştır.</div>
+        </div>
+        <div class="home-game-card"><span class="home-game-emoji">🌈</span>
+          <div class="home-game-title">Renk Doldurma</div>
+          <div class="home-game-desc">Tüm kutuları aynı renge boyamaya çalış.</div>
+        </div>
+      </div>
+      <div class="melisa-bottom-msg">
+        <span>Hoş geldin Melisa, keyifli oyunlar! 💖</span>
+      </div>
+    </section>
+    <section class="game-section" id="section-color-match">
+      <h2>🎨 Renk Eşleştirme</h2>
+      <div class="rules">Aynı renkleri bul ve eşleştir!</div>
+      <div class="game-center"><div id="color-match-board"></div></div>
+      <div class="game-footer">
+  <span id="oyun-sonucu"></span>
+  <button class="restart-btn" onclick="oyunuYenidenBaslat()">↻</button>
+</div>
+    </section>
+    <section class="game-section" id="section-balloon">
+      <h2>🎈 Balon Patlatma</h2>
+      <div class="rules">Balonları 1'den 20'ye sırayla patlat. Yanlış balona tıklarsan oyun başa döner!</div>
+      <div class="game-center"><div id="balloon-board"></div></div>
+      <div class="game-footer">
+        <span id="balloon-result"></span>
+        <button class="restart-btn" onclick="initBalloon()" title="Yeniden Başlat">↻</button>
+      </div>
+    </section>
+    <section class="game-section" id="section-animal">
+      <h2>🐶 Hayvan Bulma</h2>
+      <div class="rules">Resme bak, doğru hayvanı seç!</div>
+      <div class="game-center"><div id="animal-board"></div></div>
+      <div class="game-footer">
+        <span id="animal-result"></span>
+        <button class="restart-btn" onclick="initAnimal()" title="Yeniden Başlat">↻</button>
+      </div>
+    </section>
+    <section class="game-section" id="section-memory">
+      <h2>🃏 Hafıza Oyunu</h2>
+      <div class="rules">Aynı şekilleri bul ve eşleştir!</div>
+      <div class="game-center"><div id="memory-board"></div></div>
+      <div class="game-footer">
+        <span id="memory-result"></span>
+        <button class="restart-btn" onclick="initMemory()" title="Yeniden Başlat">↻</button>
+      </div>
+    </section>
+    <section class="game-section" id="section-xox">
+      <h2>❌⭕ XOX</h2>
+      <div class="rules xox-rules">
+        <button id="xox-human-btn" class="xox-mode-btn" onclick="setXoxMode(false)" aria-label="İki Kişi Oyna" title="İki Kişi Oyna">👤 vs 👤</button>
+        <button id="xox-computer-btn" class="xox-mode-btn" onclick="setXoxMode(true)" aria-label="Bilgisayara Karşı Oyna" title="Bilgisayara Karşı Oyna">👤 vs 🤖</button>
+      </div>
+      <div class="game-center"><div id="xox-board"></div></div>
+      <div class="game-footer xox-footer-center">
+        <button class="restart-btn" onclick="initXox()" title="Yeniden Başlat">↻</button>
+      </div>
+    </section>
+    <section class="game-section" id="section-sudoku">
+      <h2>🌿 Sudoku</h2>
+      <div class="rules">Rakamları doğru yerleştir!</div>
+      <div class="game-center"><div id="sudoku-board"></div></div>
+      <div class="game-footer">
+        <span id="sudoku-result"></span>
+        <button class="restart-btn" onclick="initSudoku()" title="Yeniden Başlat">↻</button>
+      </div>
+    </section>
+    <section class="game-section" id="section-maze">
+      <h2>🌀 Labirent</h2>
+      <div class="rules">Ok tuşları ile karakteri çıkışa ulaştır! <span style="color:#e84299">Duvara çarparsan başa dönersin.</span></div>
+      <div class="game-center"><div id="maze-board"></div></div>
+<div class="yon-tuslari">
+  <button onclick="hareketEt('up')">⬆️</button>
+  <div>
+    <button onclick="hareketEt('left')">⬅️</button>
+    <button onclick="hareketEt('down')">⬇️</button>
+    <button onclick="hareketEt('right')">➡️</button>
+</div>
+  </div>
+
+<div class="game-footer">
+    <span id="maze-result"></span>
+    <button class="restart-btn" onclick="initMaze()">↻</button>
+  </div>
+</section>
+    <section class="game-section" id="section-flood">
+      <h2>🌈 Renk Doldurma</h2>
+      <div class="rules">Tüm kutuları aynı renge boyamaya çalış! <span style="color:#e84299">Başlangıç: sol üstten başla.</span></div>
+      <div class="game-center">
+        <div id="flood-board"></div>
+      </div>
+      <div class="flood-color-btns" id="flood-color-btns"></div>
+      <div class="game-footer">
+        <span id="flood-result"></span>
+        <button class="restart-btn" onclick="initFlood()" title="Yeniden Başlat">↻</button>
+      </div>
+    </section>
+  </main>
+
+
+  <div id="overlay-message" style="display:none">
+    <div id="overlay-inner">
+      <div id="overlay-title"></div>
+      <div id="overlay-emoji"></div>
+    </div>
+    <canvas id="confetti-canvas"></canvas>
+    <div id="sad-emoji-rain"></div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    const resim = document.getElementById("profilResmi");
+
+    resim.addEventListener("click", () => {
+      resim.classList.toggle("buyuk");
+    });
+
+    // Müzik çalar JavaScript kodları
+    const sesOynatici = document.getElementById('sesOynatici');
+    const sarkiAdiElement = document.getElementById('sarkiAdi');
+    const oncekiBtn = document.getElementById('oncekiBtn');
+    const oynatDurdurBtn = document.getElementById('oynatDurdurBtn');
+    const sonrakiBtn = document.getElementById('sonrakiBtn');
+    const sesSeviyesiSlider = document.getElementById('sesSeviyesi'); // Yeni: Ses seviyesi sürgüsü
+
+    // Kendi MP3 dosyalarınızı ve adlarını buraya ekleyin!
+    const playlist = [
+        { ad: "Kız Babası", dosya: "audio/sarki1.mp3" },
+        { ad: "A Pati Pati", dosya: "audio/sarki2.mp3" },
+        { ad: "Para Bizde", dosya: "audio/sarki3.mp3" },
+        { ad: "Babasi", dosya: "audio/sarki4.mp3" },
+        { ad: "Ukrayna", dosya: "audio/sarki5.mp3" },
+        { ad: "Parla", dosya: "audio/sarki6.mp3" },
+	{ ad: "Kim Cha Ra", dosya: "audio/sarki7.mp3" },
+	{ ad: "Ой У Вишневому", dosya: "audio/sarki9.mp3" },
+	{ ad: "Fenerbahçe", dosya: "audio/sarki8.mp3" }
+  ];
+
+    let mevcutSarkiIndex = 0;
+    let isPlaying = false;
+
+    function sarkiyiYukle(index) {
+        if (playlist.length === 0) {
+            sarkiAdiElement.textContent = "Playlist boş!";
+            sesOynatici.src = "";
+            oynatDurdurBtn.disabled = true;
+            oncekiBtn.disabled = true;
+            sonrakiBtn.disabled = true;
+            sesSeviyesiSlider.disabled = true; // Yeni: Ses sürgüsünü devre dışı bırak
+            return;
+        }
+        const sarki = playlist[index];
+        sesOynatici.src = sarki.dosya;
+        sarkiAdiElement.textContent = sarki.ad;
+        sesOynatici.load(); // Ses dosyasını yükler
+        sesOynatici.volume = sesSeviyesiSlider.value; // Şarkı yüklendiğinde ses seviyesini ayarla
+    }
+
+    function oynatDurdur() {
+        if (sesOynatici.src === "") { // Playlist boşsa veya şarkı yüklü değilse oynatma
+            return;
+        }
+        if (isPlaying) {
+            sesOynatici.pause();
+            oynatDurdurBtn.textContent = '🎵 Oynat';
+        } else {
+            sesOynatici.play();
+            oynatDurdurBtn.textContent = '⏸️ Durdur';
+        }
+        isPlaying = !isPlaying;
+    }
+
+    function sonrakiSarki() {
+        if (playlist.length === 0) return;
+        mevcutSarkiIndex = (mevcutSarkiIndex + 1) % playlist.length;
+        sarkiyiYukle(mevcutSarkiIndex);
+        if (isPlaying) {
+            sesOynatici.play();
+        } else {
+            oynatDurdurBtn.textContent = '🎵 Oynat'; // Duraklatılmışsa butonu ayarla
+        }
+    }
+
+    function oncekiSarki() {
+        if (playlist.length === 0) return;
+        mevcutSarkiIndex = (mevcutSarkiIndex - 1 + playlist.length) % playlist.length;
+        sarkiyiYukle(mevcutSarkiIndex);
+        if (isPlaying) {
+            sesOynatici.play();
+        } else {
+            oynatDurdurBtn.textContent = '🎵 Oynat'; // Duraklatılmışsa butonu ayarla
+        }
+    }
+
+    // Yeni: Ses seviyesi ayarlama fonksiyonu
+    function sesSeviyesiAyarlari() {
+        sesOynatici.volume = sesSeviyesiSlider.value;
+    }
+
+    // Sayfa yüklendiğinde ilk şarkıyı yükle
+    window.addEventListener('load', () => {
+        sarkiyiYukle(mevcutSarkiIndex);
+        sesOynatici.volume = sesSeviyesiSlider.value; // İlk yüklemede ses seviyesini ayarla
+    });
+
+    // Buton olay dinleyicileri
+    oynatDurdurBtn.addEventListener('click', oynatDurdur);
+    sonrakiBtn.addEventListener('click', sonrakiSarki);
+    oncekiBtn.addEventListener('click', oncekiSarki);
+    sesSeviyesiSlider.addEventListener('input', sesSeviyesiAyarlari); // Yeni: Sürgü değiştiğinde ses seviyesini ayarla
+
+    // Şarkı bittiğinde sonraki şarkıya otomatik geç
+    sesOynatici.addEventListener('ended', sonrakiSarki);
+
+  </script>
+</body>
+</html>
