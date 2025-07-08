@@ -9,6 +9,8 @@
   --header-text: var(--text);
   --main-bg: linear-gradient(120deg, var(--bg1) 0%, var(--bg2) 100%);
 }
+
+
 body {
   background: var(--main-bg);
   font-family: 'Comic Sans MS', 'Segoe UI', Arial, sans-serif;
@@ -1015,4 +1017,72 @@ body.fenerbahce {
 
 .fenerbahce .muzik-oynatici-container {
   background-color: var(--bg2); /* Müzik çalar arka planı orta lacivert */
+}
+
+/* Mobil cihazlar için özel stiller (maksimum 478 piksel genişliğe kadar) */
+@media (max-width: 480px) {
+  /* Header (Üst Kısım) genel düzenlemesi */
+  header {
+    flex-direction: column; /* Öğeleri dikey olarak sırala (alt alta) */
+    align-items: center;    /* Öğeleri yatayda ortala */
+    padding: 15px 10px;     /* Üstten/alttan boşluğu artır, yanlardan da biraz ver */
+    height: auto;           /* İçeriğe göre yüksekliği otomatik ayarla */
+  }
+
+  /* Ana başlık (🎀 Melisa'nın Oyun Sitesi 🎀) */
+  .melisa-title {
+    font-size: 1.5em;       /* Başlık font boyutunu biraz büyüt ama çok aşırı olmasın */
+    text-align: center;     /* Başlığı ortala */
+    margin-left: 125px;
+width: 430px;
+    margin-bottom: 10px;    /* Altındaki diğer öğelerden daha fazla ayır */
+    white-space: normal;    /* Gerekirse metnin alt satıra geçmesini sağla */
+    word-break: break-word; /* Uzun kelimelerin satır sonunu aşmasını engelle */
+    line-height: 1.3;       /* Satır aralığını ayarla */
+  }
+
+  /* Sol taraftaki "Ana Sayfa" butonu grubu */
+  .header-left {
+    width: 100%;            /* Tam genişlik kapla */
+margin-left: 225px;
+    text-align: center;     /* Butonu ortala */
+    order: 2;               /* Başlığın altına gelmesini sağla */
+    margin-top: 10px;       /* Başlıktan ayır */
+  }
+
+  .home-btn {
+    font-size: 1em;         /* Buton metin boyutunu ayarla */
+    padding: 10px 20px;     /* Butonun iç boşluğunu ayarla */
+  }
+
+  /* Sağ taraftaki tema ve mod butonları grubu */
+  .header-btns {
+    width: 100%;            /* Tam genişlik kapla */
+    display: flex;          /* İçindeki butonları yatayda düzenle */
+    justify-content: space-evenly; /* Butonları eşit boşluklarla dağıt */
+    gap: 8px;               /* Butonlar arasında boşluk bırak */
+    margin-top: 15px;       /* Üstteki başlık ve ana sayfa butonundan ayır */
+    order: 3;               /* En altta yer almasını sağla */
+  }
+
+  .theme-btn, .mode-btn {
+    font-size: 1.2em;       /* Buton ikon/metin boyutunu biraz büyüt */
+    padding: 10px 12px;     /* Butonun iç boşluğunu ayarla */
+    flex-grow: 1;           /* Eşit genişlikte olmalarını sağla */
+    max-width: 90px;        /* Çok büyük olmalarını engelle */
+    min-width: 60px;        /* Çok küçük olmalarını engelle */
+    border-radius: 10px;    /* Köşeleri yuvarla */
+  }
+
+  /* Profil resmi ve altındaki boşluk (header dışı ama genel görünümü etkiler) */
+  .resim-kutusu {
+    margin-top: 15px;       /* Yukarıdan boşluğu biraz azalt */
+    margin-bottom: 15px;    /* Alttan boşluğu belirle */
+  }
+
+  .resim-kutusu img {
+    width: 120px;           /* Profil resmini küçült */
+    height: 120px;
+    border-width: 5px;      /* Çerçeve kalınlığını ayarla */
+  }
 }
