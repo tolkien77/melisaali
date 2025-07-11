@@ -259,42 +259,62 @@ body.night {
 }
 /* Menü */
 #main-nav {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 16px;
-  margin: 20px 0 16px 0;
+    display: flex; /* İçindeki öğeleri (butonları) Flexbox ile düzenle */
+    flex-wrap: wrap; /* Eğer sığmazlarsa alt satıra geçmelerini sağlar (5'li gruplama için gerekli) */
+    justify-content: center; /* Butonları yatayda (merkezde) hizalar */
+    align-items: center; /* Butonları dikeyde (satır içinde) ortalar */
+    gap: 15px; /* Butonlar arasına 15 piksel boşluk bırakır */
+    
+    /* İsteğe bağlı: Menü için maksimum genişlik belirleyerek düzeni daha kontrollü hale getirebiliriz. */
+    /* Bu genişlik, 5 butonun ve aralarındaki boşlukların rahatça sığabileceği bir değer olmalı. */
+    /* Yaklaşık 160px genişliğinde 5 buton ve 4*15px boşluk = (5*160) + (4*15) = 800 + 60 = 860px */
+    max-width: 1080px; /* Örnek değer, tarayıcı genişliğine göre ayarlayabilirsiniz */
+    margin: 20px auto; /* Menü kapsayıcısını sayfada yatayda ortalar ve üst/alttan boşluk verir */
+    padding: 10px; /* İç boşluk */
+    /* background-color: var(--bg2); /* Menü arka planı (isteğe bağlı) */
+    border-radius: 15px; /* Yuvarlak köşeler (isteğe bağlı) */
 }
+
+/* Her bir oyun butonunun stili */
 .nav-game-btn {
-  position: relative;
-  background: var(--accent2);
-  color: var(--text);
-  border: none;
-  border-radius: 18px;
-  padding: 16px 22px 14px 18px;
-  font-size: 1.25em;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 2px 16px #ffd2fc55;
-  transition: background 0.19s, color 0.19s, transform 0.13s, box-shadow 0.13s;
-  outline: none;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  letter-spacing: 0.01em;
-  min-width: 130px;
+    /* Mevcut stilleriniz (padding, border, border-radius, background-color vb.) */
+    
+    /* 5'li dizilim için her butonun genişliğini belirleyin */
+    /* Bu genişlik, 'max-width' ve 'gap' ile birlikte 5 butonun bir satıra sığmasını sağlar */
+    width: 200px; /* Örnek genişlik, içeriğe göre ayarlayabilirsiniz */
+    height: 50px; /* Butonun yüksekliği (içeriği ortalamak için önemlidir) */
+    
+    display: flex; /* Buton içindeki emoji ve yazıyı Flexbox ile düzenle */
+    flex-direction: column; /* Emoji ve yazıyı dikey olarak sırala (emoji üstte, yazı altta) */
+    justify-content: center; /* Butonun içinde dikeyde ortala */
+    align-items: center; /* Butonun içinde yatayda ortala */
+    text-align: center; /* Metin hizalaması */
+    
+    font-size: 1em; /* Genel font boyutu */
+    cursor: pointer;
+    border: none;
+    border-radius: 25px;
+    background-color: var(--accent1);
+    color: white;
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
+
+/* Buton içindeki metin için özel stil */
 .nav-game-btn span {
-  font-size: 0.91em;
-  font-weight: normal;
-  margin-left: 3px;
-  vertical-align: middle;
+    font-size: 0.85em; /* Metnin emojiye göre daha küçük olmasını sağlar */
+    margin-top: 5px; /* Emoji ile metin arasına boşluk bırakır */
+    display: block; /* Span'ı blok element yaparak kendi satırına al */
 }
-.nav-game-btn.active, .nav-game-btn:focus {
-  background: var(--accent1);
-  color: #fff;
-  box-shadow: 0 4px 24px #e8429980;
-  transform: scale(1.08);
+
+/* Butonun üzerine gelindiğinde ve aktif durumda stiller (mevcut stillerinizden alınmıştır) */
+.nav-game-btn:hover {
+    background-color: var(--text);
+    transform: translateY(-2px);
+}
+
+.nav-game-btn.active {
+    background-color: var(--text);
+    font-weight: bold;
 }
 .nav-game-btn:hover:not(.active) {
   background: #ffe066;
@@ -360,8 +380,10 @@ body.night .melisa-welcome-box {
   display: flex;
   flex-wrap: wrap;
   gap: 19px;
-  justify-content: center;
-  margin-bottom: 25px;
+  /* justify-content: center; */ /* Bu satırı yorum satırı yapın veya silin */
+  justify-content: flex-start; /* Bu satırı ekleyin */
+  margin-bottom: 10px;
+margin-left: 20px;
 }
 .home-game-card {
   background: #fff;
@@ -485,6 +507,25 @@ body.night .rules {
   margin-left: 8px;
   box-shadow: 0 2px 8px #ffb6d540;
   transition: background 0.2s, transform 0.13s;
+    /* Mevcut stilleriniz (padding, font-size, border, border-radius vb.) */
+    
+    display: block; /* Butonu kendi satırına al */
+    margin: 10px auto; /* Otomatik margin ile yatayda ortala */
+    
+    /* Örnek boyutlandırma, sizinkiler farklı olabilir: */
+    width: 40px; /* Genişlik vererek yuvarlaklığı koruyun */
+    height: 40px; /* Yükseklik vererek yuvarlaklığı koruyun */
+    display: flex; /* İçindeki '↻' sembolünü ortalamak için */
+    justify-content: center; /* Yatayda ortala */
+    align-items: center; /* Dikeyde ortala */
+}
+
+/* Eğer .game-container içinde text-align: center yoksa, onu da ekleyin veya emin olun varlığından. */
+/* Bu buton 'display: block' olduğunda bunun doğrudan etkisi olmaz ama genel düzen için önemli olabilir. */
+.game-container {
+    /* ... (diğer mevcut stilleriniz) ... */
+    text-align: center; /* Bu satır zaten varsa dokunmayın, yoksa ekleyebilirsiniz */
+}
 }
 .restart-btn:hover { background: var(--accent1); color: #fff; transform: scale(1.13);}
 .xox-footer-center {
@@ -755,7 +796,7 @@ body.night .sudoku-cell[readonly] {
   width: 32px;
   height: 32px;
   background: #fff;
-  border-radius: 7px;
+  border-radius: 8px;
   border: 1.5px solid #ffd2fc;
   display: flex;
   align-items: center;
@@ -942,7 +983,7 @@ body.fenerbahce {
 }
 
 .fenerbahce #sarkiAdi {
-  color: var(--accent1); /* Şarkı adı sarı */
+  color: #FFFF00; /* Şarkı adı sarı */
 }
 
 .fenerbahce .muzik-kontrol-btn { /* Tüm kontrol butonları için genel bir sınıf varsayarak */
@@ -1095,5 +1136,275 @@ body.fenerbahce {
     height: 120px;
     border-width: 5px;      /* Çerçeve kalınlığını ayarla */
   }
+}
+
+/* Hızlı Tıklama Oyunu */
+#section-quick-click {
+  text-align: center;
+  padding: 20px;
+}
+
+#quick-click-board {
+  margin: 30px auto;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--accent2);
+  border-radius: 50%; /* Yuvarlak alan */
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  border: 3px solid var(--border);
+}
+
+#click-button {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-color: var(--accent1);
+  color: var(--text);
+  font-size: 2em;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.1s ease-out, background-color 0.2s ease;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+}
+
+#click-button:hover {
+  background-color: #ffb86f; /* Hafif ton değişimi */
+  transform: scale(1.02);
+}
+
+#click-button:active {
+  transform: scale(0.98); /* Tıklamada küçülme efekti */
+  box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+}
+
+#quick-click-timer, #quick-click-count {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: var(--text);
+}
+
+/* Gece modu için hızlı tıklama oyunu */
+body.night #quick-click-board {
+  background-color: #555;
+  border-color: #777;
+}
+
+body.night #click-button {
+  background-color: #444;
+  color: #eee;
+  box-shadow: 0 3px 10px rgba(255,255,255,0.1);
+}
+
+body.night #click-button:hover {
+  background-color: #666;
+}
+/* Sayı Tahmini Oyunu */
+#section-number-guessing {
+  text-align: center;
+  padding: 20px;
+}
+
+.number-guessing-controls {
+  background-color: var(--bg2);
+  border: 2px solid var(--border);
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 500px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+#guessMessage {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: var(--text);
+}
+
+#guessCount {
+  font-size: 1.1em;
+  margin-bottom: 15px;
+  color: var(--text);
+}
+
+#guessInput {
+  padding: 10px;
+  font-size: 1.1em;
+  border: 2px solid var(--accent1);
+  border-radius: 8px;
+  width: 150px;
+  text-align: center;
+  margin-right: 10px;
+}
+
+#checkGuessBtn, #resetGuessBtn {
+  padding: 10px 20px;
+  font-size: 1.1em;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: var(--accent1);
+  color: white;
+  transition: background-color 0.2s ease;
+  margin: 5px;
+}
+
+#checkGuessBtn:hover, #resetGuessBtn:hover {
+  background-color: var(--text);
+}
+
+#previousGuesses {
+  font-weight: bold;
+  margin-top: 20px;
+  color: var(--text);
+}
+
+#previousGuessesList {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+#previousGuessesList li {
+  background-color: var(--accent2);
+  color: var(--text);
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.9em;
+  border: 1px solid var(--border);
+}
+
+/* Tahmin mesajları için renkler */
+#guessMessage[style*="color: green"] {
+    color: #28a745 !important; /* Yeşil */
+}
+#guessMessage[style*="color: red"] {
+    color: #dc3545 !important; /* Kırmızı */
+}
+#guessMessage[style*="color: blue"] {
+    color: #007bff !important; /* Mavi */
+}
+#guessMessage[style*="color: orange"] {
+    color: #ffc107 !important; /* Turuncu */
+}
+
+/* --- Kim Kayboldu? Oyunu CSS --- */
+.whos-missing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: 15px;
+    padding: 20px;
+    background-color: var(--accent2);
+    border-radius: 15px;
+    margin-top: 20px;
+    min-height: 120px; /* Emojiler kaybolunca boş kalmaması için */
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--border);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.whos-missing-item {
+    width: 90px;
+    height: 90px;
+    background-color: var(--bg1);
+    border: 3px solid var(--accent1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3em; /* Emojilerin boyutu */
+    cursor: default;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    color: var(--text); /* Emoji rengi */
+}
+
+/* Kaybolan öğeyi temsil eden gizli stil */
+.whos-missing-item.hidden {
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.whos-missing-options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+    padding: 15px;
+    background-color: var(--bg2);
+    border-radius: 15px;
+    border: 2px solid var(--border);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.whos-missing-option-button {
+    padding: 15px 25px;
+    font-size: 2.5em; /* Seçenek emojilerinin boyutu */
+    border: none;
+    border-radius: 12px;
+    background-color: var(--accent1);
+    color: white; /* Emoji rengi beyaz, kontrast için */
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    min-width: 120px; /* Butonların minimum genişliği */
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+.whos-missing-option-button:hover {
+    background-color: var(--text);
+    transform: translateY(-2px);
+}
+
+.whos-missing-option-button:active {
+    transform: translateY(0);
+}
+
+.whos-missing-option-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Gece modu için özel stiller */
+body.night .whos-missing-item {
+    background-color: #333;
+    border-color: #555;
+    color: #eee;
+}
+
+body.night .whos-missing-grid {
+    background-color: #444;
+    border-color: #666;
+}
+
+body.night .whos-missing-options {
+    background-color: #555;
+    border-color: #777;
+}
+
+body.night .whos-missing-option-button {
+    background-color: #777;
+    color: #fff;
+}
+
+body.night .whos-missing-option-button:hover {
+    background-color: #999;
+}
+
+.home-game-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 10px;
 }
 

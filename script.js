@@ -17,6 +17,8 @@ function selectGame(game) {
   if (game === "sudoku") initSudoku();
   if (game === "maze") initMaze();
   if (game === "flood") initFlood();
+  if (game === "number-guessing") initGuessGame();
+  if (game === "whos-missing") initWhosMissingGame(); // BU SATIRI EKLEYİN
 }
 
 // --- Gece/Gündüz Modu ---
@@ -445,7 +447,7 @@ function checkSudoku(grid){
 }
 
 // --- Labirent Oyunu (Maze) ---
-const MAZE_SIZE = 9;
+const MAZE_SIZE = 9; // Boyut orijinal değeri olan 9'a geri döndürüldü
 let maze = [], mazePlayer = {x:0, y:0}, mazeExit = {x:0, y:0}, mazeActive = false;
 function initMaze() {
   maze = generateMaze(MAZE_SIZE, MAZE_SIZE);
@@ -505,8 +507,8 @@ function generateMaze(w, h) {
       }
     }
   }
-  let start = Math.random() < 0.5 ? 0 : 2;
-  carve(start,start);
+  // Başlangıç noktası tekrar orijinal haline getirildi (0,0)
+  carve(0,0);
   grid[0][0]=0;
   grid[h-1][w-1]=0;
   return grid;
@@ -591,7 +593,72 @@ function isFloodCompleted() {
       if(floodGrid[y][x]!==c) return false;
   return true;
 }
+// Sayı Tahmini Oyunu değişkenleri
+let randomNumber;
+let guessCount;
+let previousGuesses;
 
+// HTML elemanlarını seçme
+const guessInput = document.getElementById('guessInput');
+const checkGuessBtn = document.getElementById('checkGuessBtn');
+const guessMessage = document.getElementById('guessMessage');
+const guessCountDisplay = document.getElementById('guessCount');
+const previousGuessesList = document.getElementById('previousGuessesList');
+
+function initGuessGame() {
+    randomNumber = Math.floor(Math.random() * 100) + 1;
+    guessCount = 0;
+    previousGuesses = [];
+
+    // Mesajları ve listeyi sıfırla
+    guessMessage.textContent = '1 ile 100 arasında bir sayı tuttum. Tahmin et!';
+    guessCountDisplay.textContent = 'Deneme Sayısı: 0';
+    previousGuessesList.innerHTML = ''; // Önceki tahminleri temizle
+
+    // Giriş alanını ve butonu etkinleştir
+    guessInput.value = '';
+    guessInput.disabled = false;
+    checkGuessBtn.disabled = false;
+
+    // input ve buton event listener'larını sadece bir kez ekle
+    // Eğer daha önce eklenmişlerse, tekrar eklememek için kontrol edebiliriz
+    if (!checkGuessBtn.dataset.listenerAdded) {
+        checkGuessBtn.addEventListener('click', checkGuess);
+        checkGuessBtn.dataset.listenerAdded = true; // Dinleyici eklendi işaretle
+    }
+}
+
+function checkGuess() {
+    const userGuess = Number(guessInput.value);
+
+    if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+        guessMessage.textContent = 'Lütfen geçerli bir sayı (1-100 arası) girin.';
+        return;
+    }
+
+    guessCount++;
+    guessCountDisplay.textContent = `Deneme Sayısı: ${guessCount}`;
+    previousGuesses.push(userGuess);
+
+    // Önceki tahminleri listeye ekle
+    const listItem = document.createElement('li');
+    listItem.textContent = userGuess;
+    previousGuessesList.appendChild(listItem);
+
+    if (userGuess === randomNumber) {
+        guessMessage.textContent = `Tebrikler! ${randomNumber} sayısını ${guessCount} denemede bildiniz! 🎉`;
+        guessInput.disabled = true;
+        checkGuessBtn.disabled = true;
+	showOverlay("win", "Tebrikler!", "🎉", initGuessGame);
+    } else if (userGuess < randomNumber) {
+        guessMessage.textContent = 'Daha büyük bir sayı dene.';
+    } else {
+        guessMessage.textContent = 'Daha küçük bir sayı dene.';
+    }
+
+    guessInput.value = ''; // Giriş alanını temizle
+    guessInput.focus(); // Giriş alanına odaklan
+}
 // --- Kutlama & Üzgün Yağmuru ---
 function showOverlay(type, msg, emoji, restartFn) {
   clearOverlay();
@@ -710,6 +777,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initSudoku();
   initMaze();
   initFlood();
+  initGuessGame();
 });
 
 function toggleRainbowTheme() {
@@ -752,3 +820,155 @@ function hareketYap(tus) {
   const olay = new KeyboardEvent('keydown', { key: tus });
   document.dispatchEvent(olay);
 }
+// --- Kim Kayboldu? Oyunu ---
+const characters = [
+    { name: 'Elma', emoji: '🍎' },
+    { name: 'Muz', emoji: '🍌' },
+    { name: 'Çilek', emoji: '🍓' },
+    { name: 'Üzüm', emoji: '🍇' },
+    { name: 'Portakal', emoji: '🍊' },
+    { name: 'Kivi', emoji: '🥝' },
+    { name: 'Kiraz', emoji: '🍒' },
+    { name: 'Limon', emoji: '🍋' },
+    { name: 'Köpek', emoji: '🐶' },
+    { name: 'Kedi', emoji: '🐱' },
+    { name: 'Tavşan', emoji: '🐰' },
+    { name: 'Panda', emoji: '🐼' },
+    { name: 'Ayı', emoji: '🐻' },
+    { name: 'Aslan', emoji: '🦁' },
+    { name: 'Fil', emoji: '🐘' },
+    { name: 'Maymun', emoji: '🐒' },
+    { name: 'Araba', emoji: '🚗' },
+    { name: 'Uçak', emoji: '✈️' },
+    { name: 'Tren', emoji: '🚂' },
+    { name: 'Gemi', emoji: '⛵' },
+    { name: 'Top', emoji: '⚽' },
+    { name: 'Balon', emoji: '🎈' },
+    { name: 'Çiçek', emoji: '🌸' },
+    { name: 'Güneş', emoji: '☀️' }
+];
+
+let currentRoundCharacters = [];
+let missingCharacter = null;
+let displayTimeout;
+
+function initWhosMissingGame() {
+    clearTimeout(displayTimeout); // Önceki turun zamanlayıcısını temizle
+    clearOverlay(); // Eğer varsa üst katmanı temizle (konfeti/sadrain gibi)
+    document.getElementById('whos-missing-message').textContent = '';
+    document.getElementById('whos-missing-next-btn').style.display = 'none';
+    // BURADAKİ SATIRI SİLİN:
+    // document.getElementById('whos-missing-restart-btn').style.display = 'none';
+    generateWhosMissingRound();
+}
+
+function generateWhosMissingRound() {
+    // Önceki turdan kalanları temizle
+    document.getElementById('whos-missing-display').innerHTML = '';
+    document.getElementById('whos-missing-options').innerHTML = '';
+    document.getElementById('whos-missing-message').textContent = '';
+    document.getElementById('whos-missing-next-btn').style.display = 'none';
+    // BURADAKİ SATIRI SİLİN:
+    // document.getElementById('whos-missing-restart-btn').style.display = 'none';
+
+    // Rastgele karakter seçimi (örn: 5 karakter)
+    const numCharacters = 6; // Ekranda görünecek emoji sayısı
+    let shuffledCharacters = [...characters].sort(() => 0.5 - Math.random());
+    currentRoundCharacters = shuffledCharacters.slice(0, numCharacters);
+
+    // Kaybolacak karakteri seç
+    const missingIndex = Math.floor(Math.random() * currentRoundCharacters.length);
+    missingCharacter = currentRoundCharacters[missingIndex];
+
+    // Karakterleri 5 saniye boyunca göster
+    const displayGrid = document.getElementById('whos-missing-display');
+    currentRoundCharacters.forEach(char => {
+        const item = document.createElement('div');
+        item.classList.add('whos-missing-item');
+        item.textContent = char.emoji; // Emojiyi göster
+        displayGrid.appendChild(item);
+    });
+
+    // 5 saniye sonra birini gizle ve seçenekleri göster
+    displayTimeout = setTimeout(() => {
+        displayGrid.innerHTML = ''; // Ekranı temizle
+        
+        let displayOrder = [...currentRoundCharacters];
+        
+        // Kaybolan karakterin yerine soru işareti emojisi koy
+        displayOrder[missingIndex] = { name: 'Boşluk', emoji: '❓' }; 
+
+        displayOrder.forEach(char => {
+            const item = document.createElement('div');
+            item.classList.add('whos-missing-item');
+            if (char.emoji === '❓') {
+                item.classList.add('hidden'); // Gizleme stili (opacity 0)
+                item.style.fontSize = '1.5em'; // Soru işareti daha küçük görünebilir
+            }
+            item.textContent = char.emoji; // Emojiyi veya soru işaretini göster
+            displayGrid.appendChild(item);
+        });
+
+        // Seçenekleri oluştur
+        const optionsDiv = document.getElementById('whos-missing-options');
+        let options = [];
+        options.push(missingCharacter); // Doğru cevabı seçeneklere ekle
+        
+        // Diğer 4 yanlış seçeneği ekle
+        let otherOptionsCount = numCharacters - 1; 
+        let availableForOptions = shuffledCharacters.filter(c => 
+            c.emoji !== missingCharacter.emoji && // Kaybolan karakter olmasın
+            !currentRoundCharacters.some(crc => crc.emoji === c.emoji) // Halihazırda gösterilenlerden olmasın (❓ hariç)
+        );
+        availableForOptions = availableForOptions.slice(0, otherOptionsCount); // Yeterli seçenek bul
+        options = [...options, ...availableForOptions]; // Doğru ve yanlış seçenekleri birleştir
+        
+        options.sort(() => 0.5 - Math.random()); // Seçenekleri karıştır
+
+        options.forEach(charOption => {
+            const button = document.createElement('button');
+            button.classList.add('whos-missing-option-button');
+            button.textContent = charOption.emoji; // Seçenek emojisini göster
+            button.onclick = () => checkMissingAnswer(charOption); // Cevap kontrolü için event listener
+            optionsDiv.appendChild(button);
+        });
+
+    }, 5000); // 5 saniye sonra gizle ve seçenekleri göster
+}
+
+// checkMissingAnswer fonksiyonunuzu aşağıdaki gibi güncelleyin:
+function checkMissingAnswer(selectedCharacter) {
+    const optionsButtons = document.querySelectorAll('.whos-missing-option-button');
+
+    optionsButtons.forEach(btn => btn.disabled = true);
+
+    // Mesajları ve efektleri doğrudan showOverlay fonksiyonuna bırakın
+    // document.getElementById('whos-missing-message').textContent = ''; // Bunu showOverlay halleder
+    // document.getElementById('whos-missing-message').style.color = 'var(--text)'; // Bunu showOverlay halleder
+
+    if (selectedCharacter.emoji === missingCharacter.emoji) {
+        // Doğru tahmin: showOverlay'i kullanarak kutlama ekranını ve konfetiyi göster
+        showOverlay('win', 'Bravo! Doğru Bildin!', '🎉', initWhosMissingGame); // initWhosMissingGame'i overlay kapanınca başlat
+        
+        // Sonraki tur butonu showOverlay'in işi değildir, burada kalsın
+        document.getElementById('whos-missing-next-btn').style.display = 'inline-block';
+        document.getElementById('whos-missing-next-btn').onclick = initWhosMissingGame;
+
+    } else {
+        // Yanlış tahmin: showOverlay'i kullanarak hata ekranını ve üzgün emojiyi göster
+        showOverlay('fail', 'Maalesef, Yanlış Cevap!', '😢', null); // restartFn null, çünkü tekrar deneme istenecek
+
+        optionsButtons.forEach(btn => btn.disabled = false); // Seçenekleri tekrar aktif et
+        optionsButtons.forEach(btn => {
+            if (btn.textContent === selectedCharacter.emoji) {
+                btn.style.backgroundColor = '#ffbb00'; // Yanlış cevabı vurgula
+                setTimeout(() => btn.style.backgroundColor = 'var(--accent1)', 500); // Vurguyu kaldır
+            }
+        });
+    }
+    // BURADAKİ SATIRI SİLİN:
+    // document.getElementById('whos-missing-restart-btn').style.display = 'inline-block';
+}
+
+// showOverlay ve clearOverlay fonksiyonlarınızın script.js dosyasında olduğundan emin olun.
+// startConfetti, stopConfetti, randomConfColor, startSadRain fonksiyonlarınızın da script.js dosyasında olduğundan emin olun.

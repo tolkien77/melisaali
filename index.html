@@ -9,8 +9,8 @@
   <style>
     /* Müzik çalar için CSS kodları */
     .muzik-oynatici-container {
-      background-color: #fce4ec; /* Açık pembe */
-      border: 2px solid #ff80ab; /* Koyu pembe çerçeve */
+      background-color: #FFFF00; /* Açık pembe */
+      border: 2px solid #000080; /* Koyu pembe çerçeve */
       padding: 15px 20px;
       margin: 20px auto; /* Üstten ve alttan boşluk, yatayda ortala */
       text-align: center;
@@ -22,7 +22,7 @@
     #sarkiAdi {
       font-size: 1.3em;
       font-weight: bold;
-      color: #e91e63; /* Koyu pembe */
+      color: #000080; /* Koyu pembe */
       margin-bottom: 10px;
     }
     /* KONTROL BUTONLARI İÇİN DÜZENLEME */
@@ -34,8 +34,8 @@
       margin-bottom: 10px; /* Butonlar ile ses seviyesi arasına boşluk */
     }
     .kontroller button {
-      background-color: #ff80ab; /* Pembe buton */
-      color: white;
+      background-color: #ffeb00; /* Pembe buton */
+      color: #0814a9;
       border: none;
       padding: 10px 20px;
       border-radius: 20px; /* Yuvarlak butonlar */
@@ -46,7 +46,8 @@
       white-space: nowrap; /* Buton metninin tek satırda kalmasını sağlar */
     }
     .kontroller button:hover {
-      background-color: #e91e63; /* Koyu pembe hover */
+      background-color: #0814a9; /* Koyu pembe hover */
+	color: #ffeb00;
       transform: translateY(-2px); /* Hafif yukarı kayma efekti */
     }
     .kontroller button:active {
@@ -63,7 +64,7 @@
         align-items: center;
         justify-content: center;
         gap: 8px;
-        color: #e91e63;
+        color: #0814a9;
         font-weight: bold;
     }
     .ses-seviyesi-kontrol input[type="range"] {
@@ -71,7 +72,7 @@
         -webkit-appearance: none; /* Varsayılan tarayıcı stilini kaldır */
         height: 8px;
         border-radius: 5px;
-        background: #ffcdd2; /* Açık pembe arka plan */
+        background: #ffeb00; /* Açık pembe arka plan */
         outline: none;
         transition: opacity .2s;
     }
@@ -81,7 +82,7 @@
         width: 20px;
         height: 20px;
         border-radius: 50%;
-        background: #e91e63; /* Koyu pembe başlık */
+        background: #000080; /* Koyu pembe başlık */
         cursor: pointer;
         box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
@@ -89,7 +90,7 @@
         width: 20px;
         height: 20px;
         border-radius: 50%;
-        background: #e91e63;
+        background: #000080;
         cursor: pointer;
         box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
@@ -126,6 +127,8 @@
     <button onclick="selectGame('sudoku')" id="btn-sudoku" class="nav-game-btn" data-emoji="🌿">🌿<span>Sudoku</span></button>
     <button onclick="selectGame('maze')" id="btn-maze" class="nav-game-btn" data-emoji="🌀">🌀<span>Labirent</span></button>
     <button onclick="selectGame('flood')" id="btn-flood" class="nav-game-btn" data-emoji="🌈">🌈<span>Renk Doldurma</span></button>
+    <button onclick="selectGame('number-guessing')" id="btn-number-guessing" class="nav-game-btn" data-emoji="🔢">🔢<span>Sayı Tahmini</span></button>
+    <button onclick="selectGame('whos-missing')" id="btn-whos-missing" class="nav-game-btn" data-emoji="🕵️‍♀️">🕵️‍♀️<span>Ne Kayboldu?</span></button>
   </nav>
 
   <div class="muzik-oynatici-container">
@@ -184,7 +187,16 @@
           <div class="home-game-title">Renk Doldurma</div>
           <div class="home-game-desc">Tüm kutuları aynı renge boyamaya çalış.</div>
         </div>
+<div class="home-game-card"><span class="home-game-emoji">🔢</span>
+          <div class="home-game-title">Sayı Tahmini</div>
+          <div class="home-game-desc">Doğru sayıyı bul ve Kazan.</div>
+        </div>
+	<div class="home-game-card"><span class="home-game-emoji">🕵️‍♀️</span>     
+          <div class="home-game-title">Kim Kayboldu?</div>
+          <div class="home-game-desc">Kaybolan nesneyi bul.</div>
       </div>
+	
+      
       <div class="melisa-bottom-msg">
         <span>Hoş geldin Melisa, keyifli oyunlar! 💖</span>
       </div>
@@ -263,6 +275,16 @@
     <button class="restart-btn" onclick="initMaze()">↻</button>
   </div>
 </section>
+<div class="game-section" id="section-quick-click">
+      <h2>Hızlı Tıklama Oyunu</h2>
+      <p>3 saniye içinde olabildiğince çok tıkla!</p>
+      <div id="quick-click-board">
+        <button id="click-button">Tıkla!</button>
+      </div>
+      <p>Kalan Süre: <span id="quick-click-timer">3</span>s</p>
+      <p>Tıklama Sayısı: <span id="quick-click-count">0</span></p>
+      <button onclick="initQuickClick()">Yeniden Başla</button>
+    </div>
     <section class="game-section" id="section-flood">
       <h2>🌈 Renk Doldurma</h2>
       <div class="rules">Tüm kutuları aynı renge boyamaya çalış! <span style="color:#e84299">Başlangıç: sol üstten başla.</span></div>
@@ -275,6 +297,52 @@
         <button class="restart-btn" onclick="initFlood()" title="Yeniden Başlat">↻</button>
       </div>
     </section>
+<section id="section-number-guessing" class="game-section">
+  <h2>Sayı Tahmini Oyunu</h2>
+  <div class="game-controls number-guessing-controls">
+    <p id="guessMessage">1 ile 100 arasında bir sayı tuttum. Tahmin et!</p>
+    <p id="guessCount">Deneme Sayısı: 0</p>
+    <input type="number" id="guessInput" min="1" max="100" placeholder="Tahminini gir">
+    <button id="checkGuessBtn">Tahmin Et</button>
+    <button class="restart-btn" onclick="initGuessGame()" title="Yeniden Başlat">↻</button>
+    <div class="previous-guesses-container">
+      <p id="previousGuesses">Önceki Tahminler:</p>
+      <ul id="previousGuessesList"></ul> </div>
+  </div>
+</section>
+<section id="section-number-guessing" class="game-section">
+  <h2>Sayı Tahmini Oyunu</h2>
+  <div class="game-controls number-guessing-controls">
+    <p id="guessMessage">1 ile 100 arasında bir sayı tuttum. Tahmin et!</p>
+    <p id="guessCount">Deneme Sayısı: 0</p>
+    <input type="number" id="guessInput" min="1" max="100" placeholder="Tahminini gir">
+    <button id="checkGuessBtn">Tahmin Et</button>
+    <button class="restart-btn" onclick="initGuessGame()" title="Yeniden Başlat">↻</button>
+    <div class="previous-guesses-container">
+      <p id="previousGuesses">Önceki Tahminler:</p>
+      <ul id="previousGuessesList"></ul> </div>
+  </div>
+</section>
+
+<section id="section-whos-missing" class="game-section">
+  <div class="game-container">
+    <h2>Kim Kayboldu? 🕵️‍♀️</h2>
+    <p class="game-description">Resimlere dikkatlice bak, biri kaybolunca onu bul!</p>
+
+    <div id="whos-missing-display" class="whos-missing-grid">
+    </div>
+
+    <div id="whos-missing-options" class="whos-missing-options">
+    </div>
+
+    <p id="whos-missing-message" class="game-message"></p>
+    <button id="whos-missing-next-btn" class="game-button" style="display:none;">Sonraki Tur</button>
+    
+    <button class="restart-btn" onclick="initWhosMissingGame()" title="Yeniden Başlat">↻</button>
+    
+    </div>
+</section>
+
   </main>
 
 
@@ -394,5 +462,7 @@
     sesOynatici.addEventListener('ended', sonrakiSarki);
 
   </script>
+<canvas id="confetti-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1000;"></canvas>
+  <div id="sad-emoji-rain"></div>
 </body>
 </html>
