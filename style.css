@@ -902,7 +902,7 @@ body.night #overlay-title { color: #ffd2fc; text-shadow: 0 2px 8px #39345e;}
   padding: 5px 10px;
   border: none;
   border-radius: 10px;
-  background-color: #fdd835;
+  background-color: #ff8fcf;
   color: white;
 }
 /* Fenerbahçe Teması */
@@ -919,18 +919,12 @@ body.fenerbahce {
   background: var(--main-bg) !important;
 }
 
-body:not(.fenerbahce) #fenerbahce-btn {
-  background: #FFFF00; /* Koyu Lacivert */
-  color: #00236a; /* Sarı */
-  border-color: #00236a; /* Sarı çerçeve */
-}
 /* Fenerbahçe teması aktifken Fenerbahçe butonunun arka planını ayarla */
 .fenerbahce #fenerbahce-btn {
   background: #00236a; /* Fenerbahçe sarısı */
   color: var(--bg1); /* Fenerbahçe laciverti */
   border-color: var(--bg1); /* Fenerbahçe laciverti çerçeve */
 }
-
 
 /* Fenerbahçe teması aktifken Fenerbahçe butonunun hover/active durumunu ayarla */
 .fenerbahce #fenerbahce-btn:hover,
