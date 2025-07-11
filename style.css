@@ -122,7 +122,7 @@ header {
   box-shadow: 0 2px 10px #ffd2fc55;
 }
 
-.theme-btn {
+.theme-btna {
   background: linear-gradient(90deg,#ff0000 0%,#ff9900 22%,#ff0 40%,#0f0 60%,#0ff 75%,#00f 90%,#90f 100%);
   color: #fff;
   border: none;
