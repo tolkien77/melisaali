@@ -972,3 +972,4 @@ function checkMissingAnswer(selectedCharacter) {
 
 // showOverlay ve clearOverlay fonksiyonlarınızın script.js dosyasında olduğundan emin olun.
 // startConfetti, stopConfetti, randomConfColor, startSadRain fonksiyonlarınızın da script.js dosyasında olduğundan emin olun.
+

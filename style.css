@@ -179,7 +179,7 @@ header {
   transform: scale(1.13);
 }
 .theme-btn {
-  background: linear-gradient(90deg,#ff0000 0%,#ff9900 22%,#ff0 40%,#0f0 60%,#0ff 75%,#00f 90%,#90f 100%);
+  background: #000080;
   color: #fff;
   border: none;
   border-radius: 50%;
@@ -1018,11 +1018,12 @@ body.fenerbahce {
 
 .fenerbahce .nav-game-btn {
   background-color: var(--bg1); /* Navigasyon butonları koyu lacivert */
-  color: var(--accent1); /* Yazısı sarı */
+  color: #FFFF00; /* Yazısı sarı */
 }
 
 .fenerbahce .nav-game-btn:hover {
-  background-color: var(--bg2); /* Hover'da orta lacivert */
+  background-color: #FFFF00; /* Hover'da orta lacivert */
+color: #000080; /* Yazısı sarı */
 }
 
 .fenerbahce .nav-game-btn.active {
