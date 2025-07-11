@@ -1019,11 +1019,13 @@ body.fenerbahce {
 .fenerbahce .nav-game-btn {
   background-color: var(--bg1); /* Navigasyon butonları koyu lacivert */
   color: #FFFF00; /* Yazısı sarı */
+border: 2px solid #FFFF00;
 }
 
 .fenerbahce .nav-game-btn:hover {
   background-color: #FFFF00; /* Hover'da orta lacivert */
 color: #000080; /* Yazısı sarı */
+border: 2px solid #000080;
 }
 
 .fenerbahce .nav-game-btn.active {
