@@ -19,6 +19,8 @@ function selectGame(game) {
   if (game === "flood") initFlood();
   if (game === "number-guessing") initGuessGame();
   if (game === "whos-missing") initWhosMissingGame(); // BU SATIRI EKLEYİN
+  if (game === "liquid-sort") initLiquidSortGame();
+  if (game === "catch") initCatchGame();
 }
 
 // --- Gece/Gündüz Modu ---
@@ -973,3 +975,350 @@ function checkMissingAnswer(selectedCharacter) {
 // showOverlay ve clearOverlay fonksiyonlarınızın script.js dosyasında olduğundan emin olun.
 // startConfetti, stopConfetti, randomConfColor, startSadRain fonksiyonlarınızın da script.js dosyasında olduğundan emin olun.
 
+
+// --- Sıvı Ayırma Oyunu ---
+const LIQUID_COLORS = ["#FF6347", "#ff2eff", "#32CD32", "#FFD700", "#9370DB", "#00CED1"]; // Kullanılacak sıvı renkleri
+const TUBE_CAPACITY = 4; // Her tüpün alabileceği sıvı miktarı
+const NUM_TUBES = 6; // Toplam tüp sayısı (oyun seviyesine göre ayarlanabilir)
+const EMPTY_TUBES = 2; // Başlangıçta boş olacak tüp sayısı
+
+let tubes = []; // Oyunun mevcut durumunu tutacak dizi
+let selectedTube = null; // Seçilen tüpün indeksi
+let liquidSortGameArea; // Oyun alanının DOM elementi
+
+function initLiquidSortGame() {
+    liquidSortGameArea = document.getElementById('liquid-sort-game-area');
+    liquidSortGameArea.innerHTML = ''; // Önceki oyunu temizle
+    tubes = [];
+    selectedTube = null;
+
+    // Renkleri karıştır ve tüplere dağıt
+    let allLiquids = [];
+    for (let i = 0; i < (NUM_TUBES - EMPTY_TUBES); i++) {
+        for (let j = 0; j < TUBE_CAPACITY; j++) {
+            allLiquids.push(LIQUID_COLORS[i % LIQUID_COLORS.length]);
+        }
+    }
+    shuffleArray(allLiquids);
+
+    // Tüpleri oluştur
+    for (let i = 0; i < NUM_TUBES; i++) {
+        tubes.push([]);
+    }
+
+    // Sıvıları tüplere doldur
+    let currentLiquidIndex = 0;
+    for (let i = 0; i < (NUM_TUBES - EMPTY_TUBES); i++) { // Sadece dolu tüplere doldur
+        for (let j = 0; j < TUBE_CAPACITY; j++) {
+            tubes[i].push(allLiquids[currentLiquidIndex++]);
+        }
+    }
+
+    renderLiquidSortGame();
+}
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]]; // Elemanları yer değiştir
+    }
+}
+
+function renderLiquidSortGame() {
+    liquidSortGameArea.innerHTML = '';
+    tubes.forEach((tube, index) => {
+        const tubeElement = document.createElement('div');
+        tubeElement.classList.add('liquid-sort-tube');
+        if (index === selectedTube) {
+            tubeElement.classList.add('selected');
+        }
+        tubeElement.dataset.index = index;
+        tubeElement.onclick = () => handleTubeClick(index);
+
+        // Sıvıları tüpün içine yerleştir
+        tube.forEach(color => {
+            const liquidLayer = document.createElement('div');
+            liquidLayer.classList.add('liquid-layer');
+            liquidLayer.style.backgroundColor = color;
+            tubeElement.appendChild(liquidLayer);
+        });
+
+        // Tüpün boş kısımlarını doldur (görsel için)
+        for (let i = tube.length; i < TUBE_CAPACITY; i++) {
+            const emptyLayer = document.createElement('div');
+            emptyLayer.classList.add('liquid-layer', 'empty');
+            tubeElement.appendChild(emptyLayer);
+        }
+        liquidSortGameArea.appendChild(tubeElement);
+    });
+}
+
+function handleTubeClick(index) {
+    if (selectedTube === null) {
+        // İlk tüp seçimi
+        if (tubes[index].length > 0) {
+            selectedTube = index;
+            renderLiquidSortGame();
+        }
+    } else if (selectedTube === index) {
+        // Aynı tüp tekrar seçilirse seçimi kaldır
+        selectedTube = null;
+        renderLiquidSortGame();
+    } else {
+        // İkinci tüp seçimi, sıvıyı aktarmaya çalış
+        pourLiquid(selectedTube, index);
+    }
+}
+
+function pourLiquid(fromIndex, toIndex) {
+    const fromTube = tubes[fromIndex];
+    const toTube = tubes[toIndex];
+
+    if (fromTube.length === 0) {
+        selectedTube = null;
+        renderLiquidSortGame();
+        return; // Kaynak tüp boşsa hiçbir şey yapma
+    }
+
+    const liquidToMove = fromTube[fromTube.length - 1]; // En üstteki sıvı
+
+    // Hedef tüp doluysa veya renk uyuşmuyorsa ve hedef tüp boş değilse
+    if (toTube.length === TUBE_CAPACITY ||
+        (toTube.length > 0 && toTube[toTube.length - 1] !== liquidToMove)) {
+        selectedTube = null;
+        renderLiquidSortGame();
+        return; // Geçersiz hareket
+    }
+
+    // Sıvıyı aktar
+    let movedCount = 0;
+    for (let i = fromTube.length - 1; i >= 0; i--) {
+        if (fromTube[i] === liquidToMove && toTube.length < TUBE_CAPACITY) {
+            toTube.push(fromTube.pop());
+            movedCount++;
+        } else {
+            break; // Farklı renk veya hedef dolu
+        }
+    }
+    
+    selectedTube = null;
+    renderLiquidSortGame();
+
+    if (checkLiquidSortWin()) {
+        showOverlay("win", "Tebrikler! Sıvıları Ayırdın!", "🎉", initLiquidSortGame);
+    }
+}
+
+
+function checkLiquidSortWin() {
+    return tubes.every(tube => {
+        if (tube.length === 0) {
+            return true; // Boş tüpler de tamamlanmış sayılır
+        }
+        // Tüp doluysa ve tüm renkler aynıysa
+        return tube.length === TUBE_CAPACITY && tube.every(color => color === tube[0]);
+    });
+}
+
+
+// --- Düşenleri Yakala Oyunu ---
+let catchGameCanvas;
+let catchGameCtx;
+let player;
+let fallingObjects = [];
+let catchScore = 0;
+let catchGameActive = false;
+let catchAnimationFrameId;
+let objectGenerationInterval; // Nesne oluşturma interval'ı için
+let objectSpeed = 1.5; // Nesnelerin düşme hızı (ayarladığınız güncel değer)
+let playerSpeed = 20; // Oyuncunun hareket hızı (ayarladığınız güncel değer)
+
+const PLAYER_WIDTH = 60;
+const PLAYER_HEIGHT = 20;
+
+// Mobil kontrol butonları değişkenleri
+let catchLeftBtn;
+let catchRightBtn;
+
+function initCatchGame() {
+    // Önceki oyunun animasyonunu durdur (varsa)
+    if (catchAnimationFrameId) {
+        cancelAnimationFrame(catchAnimationFrameId);
+    }
+    if (objectGenerationInterval) {
+        clearInterval(objectGenerationInterval);
+    }
+    clearOverlay(); // Eğer varsa üst katmanı temizle
+
+    catchGameCanvas = document.getElementById('catch-game-canvas');
+    if (!catchGameCanvas) {
+        console.error("Catch game canvas bulunamadı!");
+        return;
+    }
+    catchGameCtx = catchGameCanvas.getContext('2d');
+
+    player = {
+        x: catchGameCanvas.width / 2 - PLAYER_WIDTH / 2,
+        y: catchGameCanvas.height - PLAYER_HEIGHT - 10,
+        width: PLAYER_WIDTH,
+        height: PLAYER_HEIGHT
+    };
+
+    fallingObjects = [];
+    catchScore = 0;
+    objectSpeed = 1.5; // Hızı başlangıç değerine sıfırla
+    catchGameActive = true;
+    document.getElementById('catch-score').textContent = catchScore;
+
+    // Nesne oluşturma interval'ını başlat (güncel değer)
+    objectGenerationInterval = setInterval(generateFallingObject, 2000); // Örneğin 2 saniyede bir
+
+    // Oyun döngüsünü başlat
+    gameLoopCatch();
+
+    // Klavye dinleyicilerini ekle (sadece bir kez ekle)
+    if (!document.body.dataset.catchKeyListenerAdded) {
+        document.addEventListener('keydown', handleCatchGameKeydown);
+        document.body.dataset.catchKeyListenerAdded = true;
+    }
+
+    // Mobil kontrol butonlarını al ve olay dinleyicilerini ekle
+    catchLeftBtn = document.getElementById('catch-left-btn');
+    catchRightBtn = document.getElementById('catch-right-btn');
+
+    if (catchLeftBtn && !catchLeftBtn.dataset.listenerAdded) {
+        catchLeftBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            player.x -= playerSpeed;
+            if (player.x < 0) player.x = 0;
+        });
+        catchLeftBtn.addEventListener('mousedown', () => {
+            player.x -= playerSpeed;
+            if (player.x < 0) player.x = 0;
+        });
+        catchLeftBtn.dataset.listenerAdded = true;
+    }
+
+    if (catchRightBtn && !catchRightBtn.dataset.listenerAdded) {
+        catchRightBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            player.x += playerSpeed;
+            if (player.x + player.width > catchGameCanvas.width) player.x = catchGameCanvas.width - player.width;
+        });
+        catchRightBtn.addEventListener('mousedown', () => {
+            player.x += playerSpeed;
+            if (player.x + player.width > catchGameCanvas.width) player.x = catchGameCanvas.width - player.width;
+        });
+        catchRightBtn.dataset.listenerAdded = true;
+    }
+}
+
+function generateFallingObject() {
+    const isStar = Math.random() > 0.3;
+    fallingObjects.push({
+        x: Math.random() * (catchGameCanvas.width - 20),
+        y: 0,
+        type: isStar ? 'star' : 'bomb',
+        emoji: isStar ? '🌟' : '💣',
+        size: 25,
+        speed: objectSpeed + Math.random() * 1.5
+    });
+}
+
+function drawPlayer() {
+    catchGameCtx.fillStyle = 'var(--accent1)'; // Sarı oyuncu
+    catchGameCtx.fillRect(player.x, player.y, player.width, player.height);
+    
+    catchGameCtx.font = '20px Arial';
+    catchGameCtx.textAlign = 'center';
+    catchGameCtx.fillText('🧺', player.x + player.width / 2, player.y + player.height - 2); // Sepet emojisi
+}
+
+function drawObject(obj) {
+    catchGameCtx.font = `${obj.size}px Arial`;
+    catchGameCtx.textAlign = 'center';
+
+    // Temanın aktif olup olmadığını kontrol ederek renk belirliyoruz
+    if (document.body.classList.contains('fenerbahce')) {
+        // Fenerbahçe teması aktifse sarı ve koyu lacivert arasındaki renkleri kullan
+        catchGameCtx.fillStyle = (obj.type === 'star') ? '#008000' : '#FFFF00'; // Yıldız sarı, bomba koyu lacivert
+    } else {
+        // Diğer temalarda (varsayılan, gece vb.) yıldız için siyah, bomba için koyu kırmızı
+        catchGameCtx.fillStyle = (obj.type === 'star') ? '#FF69B4' : '#FF69B4'; // YILDIZ İÇİN SİYAH, bomba için koyu kırmızı
+    }
+
+    catchGameCtx.fillText(obj.emoji, obj.x + obj.size / 2, obj.y + obj.size);
+}
+
+function updateGame() {
+    if (!catchGameActive) return;
+
+    for (let i = 0; i < fallingObjects.length; i++) {
+        let obj = fallingObjects[i];
+        obj.y += obj.speed;
+
+        // Çarpışma kontrolü
+        if (obj.y + obj.size > player.y &&
+            obj.x < player.x + player.width &&
+            obj.x + obj.size > player.x &&
+            obj.y < player.y + player.height) {
+
+            // Çarpıştı!
+            if (obj.type === 'star') {
+                catchScore += 10;
+                document.getElementById('catch-score').textContent = catchScore;
+            } else if (obj.type === 'bomb') {
+                catchScore -= 15;
+                if (catchScore < 0) catchScore = 0;
+                document.getElementById('catch-score').textContent = catchScore;
+            }
+            fallingObjects.splice(i, 1);
+            i--;
+        } else if (obj.y > catchGameCanvas.height) {
+            // Ekranın dışına çıktı
+            if (obj.type === 'star') {
+                catchScore -= 5;
+                if (catchScore < 0) catchScore = 0;
+                document.getElementById('catch-score').textContent = catchScore;
+            }
+            fallingObjects.splice(i, 1);
+            i--;
+        }
+    }
+
+    // Oyun Bitiş Koşulu
+    if (catchScore < -50) {
+        catchGameActive = false;
+        clearInterval(objectGenerationInterval);
+        showOverlay("fail", "Oyun Bitti! Skorunuz çok düştü.", "💥", initCatchGame);
+    }
+    
+    // Oyunun hızını skora göre artır (isteğe bağlı)
+    objectSpeed = 1.5 + Math.floor(catchScore / 100) * 0.5;
+}
+
+function gameLoopCatch() {
+    catchGameCtx.clearRect(0, 0, catchGameCanvas.width, catchGameCanvas.height); // Ekranı temizle
+
+    drawPlayer();
+    fallingObjects.forEach(drawObject); // Düşen objeleri çiz
+
+    updateGame(); // Oyunu güncelle
+
+    if (catchGameActive) {
+        catchAnimationFrameId = requestAnimationFrame(gameLoopCatch); // Sonraki kareyi iste
+    }
+}
+
+// Klavye olay dinleyicisi
+function handleCatchGameKeydown(e) {
+    if (!document.getElementById('section-catch').classList.contains('active') || !catchGameActive) return;
+
+    if (e.key === 'ArrowLeft' || e.key === 'a') {
+        player.x -= playerSpeed;
+        if (player.x < 0) player.x = 0;
+    } else if (e.key === 'ArrowRight' || e.key === 'd') {
+        player.x += playerSpeed;
+        if (player.x + player.width > catchGameCanvas.width) player.x = catchGameCanvas.width - player.width;
+    }
+}

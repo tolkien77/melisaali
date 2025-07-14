@@ -713,6 +713,26 @@ body.night .xox-rules { background: #39345e40; box-shadow: 0 1px 6px #23213c99;}
   border-color: #ffb6d5;
   box-shadow: 0 2px 6px #e8429922;
 }
+
+/* style.css dosyanızda body.fenerbahce bloğunun içine ekleyin */
+
+body.fenerbahce .xox-mode-btn.active,
+body.fenerbahce .xox-mode-btn:focus {
+  background: #FFFF00; /* Sarı renk */
+  color: #000033; /* Fenerbahçe mavisi veya koyu bir renk */
+  border-color: var(--border); /* Sarı kenarlık */
+  box-shadow: 0 2px 6px rgba(var(--accent1-rgb), 0.2); /* Sarı tonlarında gölge */
+}
+body.fenerbahce .xox-mode-btn {
+  color: var(--text); /* Lacivert renk için temanın --text değişkenini kullan */
+}
+
+/* Eğer hover durumunda da rengin lacivert kalmasını istiyorsanız */
+body.fenerbahce .xox-mode-btn:hover {
+background: #CCCC99; /* Sarı renk */
+  color: var(--text); /* Hover durumunda da lacivert kalır */
+}
+
 .xox-mode-btn:hover:not(.active) {
   background: #ffd2fc;
   color: #a4133c;
@@ -960,6 +980,18 @@ body.fenerbahce {
   background: var(--main-bg) !important;
 }
 
+body.fenerbahce .melisa-welcome-box {
+background:#FFFF00;
+}
+
+body.fenerbahce .melisa-welcome-box h2 {
+color:#00236a;
+}
+
+body.fenerbahce .melisa-welcome-msg {
+color:#00236a;
+}
+
 /* Fenerbahçe teması aktifken Fenerbahçe butonunun arka planını ayarla */
 .fenerbahce #fenerbahce-btn {
   background: #00236a; /* Fenerbahçe sarısı */
@@ -1039,15 +1071,65 @@ border: 2px solid #000080;
 }
 
 .fenerbahce .game-section h2 {
-  color: var(--accent1); /* Oyun başlıkları sarı */
+  color: #FFFF00; /* Oyun başlıkları sarı */
 }
 
 .fenerbahce .rules {
-  color: var(--text); /* Kurallar beyaz */
+  color: #FFFF00; /* Kurallar beyaz */
 }
 
 .fenerbahce .game-footer span {
   color: var(--accent1); /* Sonuç yazısı sarı */
+}
+
+.fenerbahce #guessMessage {
+  color: #FFFF00; /* Sonuç yazısı sarı */
+}
+.fenerbahce #previousGuesses {
+  color: #FFFF00; /* Sonuç yazısı sarı */
+}
+.fenerbahce  #guessCount {
+  color: #FFFF00; /* Sonuç yazısı sarı */
+}
+
+.fenerbahce .game-description {
+  color: #FFFF00; /* Sonuç yazısı sarı */
+}
+
+
+
+/* Fenerbahçe Teması için Ana Sayfa Oyun Kartları */
+body.fenerbahce .home-game-card {
+  background-color: #FFFF00; /* Kartların arka planını sarı yapar */
+  color: var(--bg1); /* Kartların içindeki yazı rengini koyu lacivert yapar */
+  border-color: var(--bg2); /* İsteğe bağlı: Kenarlık rengini orta lacivert yapabiliriz */
+}
+
+/* Kart başlıklarının (home-game-title) rengini de koyu lacivert yapalım */
+body.fenerbahce .home-game-card .home-game-title {
+  color: var(--bg1);
+}
+
+/* Kart açıklamalarının (home-game-desc) rengini de koyu lacivert yapalım */
+body.fenerbahce .home-game-card .home-game-desc {
+  color: var(--bg1);
+}
+
+/* Kartlardaki emojilerin (home-game-emoji) rengini de koyu lacivert yapalım */
+body.fenerbahce .home-game-card .home-game-emoji {
+  color: var(--bg1);
+}
+
+/* Fenerbahçe Teması için Alt Mesaj Kutusu */
+body.fenerbahce .melisa-bottom-msg {
+  background-color: #FFFF00; /* Arka planı sarı yapar */
+  color: var(--bg1); /* Yazı rengini koyu lacivert yapar */
+  border: 2px solid var(--bg2); /* İsteğe bağlı: Kenarlık rengini orta lacivert yapabiliriz */
+}
+
+/* İçindeki span elementinin de rengini koyu lacivert yapalım (emin olmak için) */
+body.fenerbahce .melisa-bottom-msg span {
+  color: var(--bg1);
 }
 
 .fenerbahce .restart-btn {
@@ -1056,6 +1138,10 @@ border: 2px solid #000080;
   border-color: var(--bg1); /* Yeniden başlat butonu çerçevesi lacivert */
 }
 
+/* Fenerbahçe Teması için Melisa Hoş Geldin Mesajı Yazısı */
+body.fenerbahce .melisa-welcome-msg {
+  color: var(--bg1); /* Yazı rengini koyu lacivert yapar */
+}
 /* Diğer oyun detayları için örnekler - ihtiyaca göre ekleyebilirsiniz */
 .fenerbahce #color-match-board .color-card {
   border-color: var(--accent1); /* Kart çerçeveleri sarı */
@@ -1119,7 +1205,7 @@ border: 2px solid #000080;
     order: 3;               /* En altta yer almasını sağla */
   }
 
-  .theme-btn, .mode-btn {
+  .theme-btn, .mode-btn, .theme-btna {
     font-size: 1.2em;       /* Buton ikon/metin boyutunu biraz büyüt */
     padding: 10px 12px;     /* Butonun iç boşluğunu ayarla */
     flex-grow: 1;           /* Eşit genişlikte olmalarını sağla */
@@ -1411,3 +1497,175 @@ body.night .whos-missing-option-button:hover {
   margin-top: 10px;
 }
 
+
+/* --- Sıvı Ayırma Oyunu Stilleri --- */
+#liquid-sort-game-area {
+    display: flex;
+    flex-wrap: wrap; /* Tüplerin sığmazsa alt satıra geçmesini sağlar */
+    justify-content: center;
+    gap: 20px; /* Tüpler arasında boşluk */
+    margin-top: 20px;
+    padding: 20px;
+    background-color: var(--bg2); /* Arka plan rengi */
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    max-width: 90%; /* Kapsayıcının maksimum genişliği */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.liquid-sort-tube {
+    width: 60px; /* Tüp genişliği */
+    height: 200px; /* Tüp yüksekliği */
+    border: 3px solid var(--text); /* Tüp çerçevesi */
+    border-top: none; /* Üstte çerçeve olmasın */
+    border-bottom-left-radius: 30px; /* Tüpün altı yuvarlak */
+    border-bottom-right-radius: 30px;
+    display: flex;
+    flex-direction: column-reverse; /* Sıvılar alttan dolsun */
+    justify-content: flex-start; /* Sıvılar altta biriksin */
+    overflow: hidden; /* Taşmayı engelle */
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, border-color 0.2s ease;
+    background-color: rgba(255, 255, 255, 0.5); /* Tüpün içi yarı şeffaf beyaz */
+}
+
+.liquid-sort-tube.selected {
+    transform: translateY(-15px) scale(1.05); /* Seçili tüpü hafifçe kaldır ve büyüt */
+    border-color: #007bff; /* Seçili tüpün rengi */
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.6); /* Seçili tüpün parlak gölgesi */
+}
+
+.liquid-layer {
+    width: 100%;
+    height: 25%; /* Her bir sıvı katmanı tüpün %25'ini kaplasın (4 katman için) */
+    /* background-color belirlenir JS tarafından */
+    transition: background-color 0.3s ease;
+}
+
+.liquid-layer.empty {
+    background-color: transparent !important; /* Boş katman şeffaf olsun */
+}
+
+/* Gece modu için Sıvı Ayırma Oyunu stilleri */
+body.night #liquid-sort-game-area {
+    background-color: #39345e; /* Koyu arka plan */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+body.night .liquid-sort-tube {
+    border: 3px solid #f7eaff; /* Koyu modda tüp çerçevesi */
+    background-color: rgba(0, 0, 0, 0.3); /* Koyu modda tüp içi */
+}
+
+body.night .liquid-sort-tube.selected {
+    border-color: #6a0dad; /* Koyu modda seçili tüp rengi */
+    box-shadow: 0 0 15px rgba(106, 13, 173, 0.8); /* Koyu modda gölge */
+}
+
+/* Düşenleri Yakala Oyunu Özel Stilleri */
+#section-catch .game-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* min-height: 420px; */ /* Canvas boyutu kadar boşluk bırakabiliriz */
+}
+
+#catch-game-canvas {
+  /* Canvas'a varsayılan bir border ve arka plan verebiliriz */
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Fenerbahçe Teması için Düşenleri Yakala Oyunu Stilleri */
+body.fenerbahce #section-catch #catch-game-canvas {
+  background-color: var(--bg2); /* Orta lacivert arka plan */
+  border: 2px solid var(--accent1); /* Sarı kenarlık */
+}
+
+body.fenerbahce #section-catch .game-footer span {
+  color: var(--text); /* Skor yazısını koyu lacivert veya beyaz yapar */
+}
+
+body.fenerbahce .resim-kutusu img {
+border: 10px solid #FFFF00; /* Sarı kenarlık */
+}
+/* Mobil Kontrol Butonları için Stiller */
+.mobile-controls {
+  display: flex; /* Butonları yan yana yerleştir */
+  justify-content: center; /* Ortala */
+  gap: 20px; /* Butonlar arasına boşluk koy */
+  margin-top: 15px;
+  margin-bottom: 15px; /* Oyun sonu ve skor arasına boşluk */
+}
+
+.mobile-arrow-btn {
+  padding: 15px 30px;
+  font-size: 2em; /* Ok işaretlerini büyük yap */
+  background-color: var(--accent1); /* Temanın vurgu rengini kullan */
+  color: var(--bg1); /* Koyu metin rengi (lacivert veya varsayılan koyu) */
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.mobile-arrow-btn:hover {
+  background-color: var(--accent2);
+}
+
+.mobile-arrow-btn:active {
+  transform: translateY(2px); /* Tıklayınca hafifçe aşağı kaysın */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Sadece mobil cihazlarda göster (isteğe bağlı, daha küçük ekranlar için) */
+@media (min-width: 768px) {
+  .mobile-controls {
+    display: none; /* Büyük ekranlarda gizle */
+  }
+}
+
+/* Fenerbahçe Teması için Mobil Buton Stilleri */
+body.fenerbahce .mobile-arrow-btn {
+  background-color: var(--accent1); /* Sarı */
+  color: var(--bg1); /* Koyu Lacivert */
+}
+
+/* style.css dosyanıza ekleyin */
+
+@media only screen and (max-width: 600px) {
+  /* BODY etiketi için mobil ayarlamaları */
+  body {
+    width: 100vw; /* Sayfanın görünüm alanının (viewport) tam genişliğini almasını sağlar */
+    max-width: 100%; /* Genişliğin %100'ü geçmesini engeller */
+    overflow-x: hidden; /* Yatay kaydırmayı engeller */
+    padding: 0; /* body'nin varsayılan kenar boşluklarını kaldırır, bazen bu da daralmaya neden olabilir */
+  }
+
+  /* Ana sayfadaki oyun kartları listesi için stiller */
+  .home-game-list {
+    display: grid; /* Izgara düzenini etkinleştir */
+    grid-template-columns: repeat(2, 1fr); /* İki eşit genişlikte sütun oluştur */
+    gap: 15px; /* Kartlar arasında 15 piksel boşluk bırak */
+    padding: 10px; /* Liste etrafında hafif boşluk */
+    justify-items: center; /* Kartları ızgara içinde ortala */
+  }
+
+  .home-game-card {
+    /* Kartların mobil cihazlarda genişlik ayarı */
+    max-width: 100%; /* Sütun içinde kendi genişliğini almasını sağla */
+  }
+
+  /* En alttaki "Hoş geldin Melisa" mesajı için stil */
+  .melisa-bottom-msg {
+    font-size: 1.1em; /* Yazı boyutu ayarlı kalsın */
+    width: 100%; /* **Kapsayıcının ekranın tamamını kaplamasını sağlar** */
+    padding: 0 15px; /* **İçeriden yanlardan 15px boşluk bırakır (metnin kenara yapışmasını önler)** */
+    margin: 15px auto; /* **Üstten ve alttan 15px, yanlardan otomatik boşluk ile yatayda ortalar** */
+    text-align: center; /* Metni kutunun içinde ortalar */
+    box-sizing: border-box; /* Padding ve border'ın genişliğe dahil olmasını sağlar */
+  }
+}

@@ -129,6 +129,8 @@
     <button onclick="selectGame('flood')" id="btn-flood" class="nav-game-btn" data-emoji="🌈">🌈<span>Renk Doldurma</span></button>
     <button onclick="selectGame('number-guessing')" id="btn-number-guessing" class="nav-game-btn" data-emoji="🔢">🔢<span>Sayı Tahmini</span></button>
     <button onclick="selectGame('whos-missing')" id="btn-whos-missing" class="nav-game-btn" data-emoji="🕵️‍♀️">🕵️‍♀️<span>Ne Kayboldu?</span></button>
+<button onclick="selectGame('liquid-sort')" id="btn-liquid-sort" class="nav-game-btn" data-emoji="🧪">🧪<span>Sıvı Ayırma</span></button>
+<button onclick="selectGame('catch')" id="btn-catch" class="nav-game-btn" data-emoji="🌟">🌟<span>Düşenleri Yakala</span></button>
   </nav>
 
   <div class="muzik-oynatici-container">
@@ -195,8 +197,17 @@
           <div class="home-game-title">Kim Kayboldu?</div>
           <div class="home-game-desc">Kaybolan nesneyi bul.</div>
       </div>
-	
-      
+	<div class="home-game-card" onclick="selectGame('liquid-sort')">
+  <span class="home-game-emoji">🧪</span>
+  <div class="home-game-title">Sıvı Ayırma Oyunu</div>
+  <div class="home-game-desc">Renkli sıvıları doğru tüplere ayır.</div>
+</div>
+<div class="home-game-card" onclick="selectGame('catch')">
+  <span class="home-game-emoji">🧺</span>
+  <div class="home-game-title">Yakala Oyunu</div>
+  <div class="home-game-desc">Yukarıdan düşen nesneleri yakala.</div>
+</div>
+   </div>   
       <div class="melisa-bottom-msg">
         <span>Hoş geldin Melisa, keyifli oyunlar! 💖</span>
       </div>
@@ -259,7 +270,7 @@
     </section>
     <section class="game-section" id="section-maze">
       <h2>🌀 Labirent</h2>
-      <div class="rules">Ok tuşları ile karakteri çıkışa ulaştır! <span style="color:#e84299">Duvara çarparsan başa dönersin.</span></div>
+      <div class="rules">Ok tuşları ile karakteri çıkışa ulaştır! <span>Duvara çarparsan başa dönersin.</span></div>
       <div class="game-center"><div id="maze-board"></div></div>
 <div class="yon-tuslari">
   <button onclick="hareketEt('up')">⬆️</button>
@@ -287,7 +298,7 @@
     </div>
     <section class="game-section" id="section-flood">
       <h2>🌈 Renk Doldurma</h2>
-      <div class="rules">Tüm kutuları aynı renge boyamaya çalış! <span style="color:#e84299">Başlangıç: sol üstten başla.</span></div>
+      <div class="rules">Tüm kutuları aynı renge boyamaya çalış! <span>Başlangıç: sol üstten başla.</span></div>
       <div class="game-center">
         <div id="flood-board"></div>
       </div>
@@ -323,7 +334,27 @@
       <ul id="previousGuessesList"></ul> </div>
   </div>
 </section>
-
+<section id="section-liquid-sort" class="game-section">
+  <h2>Sıvı Ayırma Oyunu</h2>
+  <div class="rules">Sıvıları doğru tüplere ayır! </div>
+  <div id="liquid-sort-game-area"></div>
+  <button class="restart-btn" onclick="initLiquidSortGame()" title="Yeniden Başlat">↻</button>
+</section>
+<section class="game-section" id="section-catch">
+  <h2>🌟 Düşenleri Yakala!</h2>
+  <div class="rules">Sepeti sağa-sola hareket ettirerek düşen yıldızları topla, bombalardan kaç!</div>
+  <div class="game-center">
+    <canvas id="catch-game-canvas" width="400" height="400" style="border: 2px solid var(--border); background-color: var(--bg2);"></canvas>
+  </div>
+  <div class="game-footer">
+  <div class="mobile-controls">
+    <button id="catch-left-btn" class="mobile-arrow-btn">◀</button>
+    <button id="catch-right-btn" class="mobile-arrow-btn">▶</button>
+  </div>
+  <span>Skor: <span id="catch-score">0</span></span>
+  <button class="restart-btn" onclick="initCatchGame()" title="Yeniden Başlat">↻</button>
+</div>
+</section>
 <section id="section-whos-missing" class="game-section">
   <div class="game-container">
     <h2>Kim Kayboldu? 🕵️‍♀️</h2>
