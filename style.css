@@ -1722,8 +1722,8 @@ background-color: #FFFF00;
     background-color: var(--primary-btn-bg); /* Örneğin: var(--primary-btn-bg) */
     color: var(--primary-btn-text); /* Örneğin: var(--primary-btn-text) */
     border: none;
-    padding: 15px 20px; /* Daha büyük tıklama alanı */
-    border-radius: 50%; /* Yuvarlak butonlar */
+    padding: 10px 10px; /* Daha büyük tıklama alanı */
+    border-radius: 75%; /* Yuvarlak butonlar */
     font-size: 1.5em; /* Büyük ok işaretleri */
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
