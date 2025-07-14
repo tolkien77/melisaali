@@ -1696,4 +1696,60 @@ background-color: #FFFF00;
     box-sizing: border-box; /* Padding ve border'ın genişliğe dahil olmasını sağlar */
   }
 }
+/* ==================================== */
+/* Labirent Oyunu - Yön Tuşları Stilleri */
+/* ==================================== */
 
+/* Mobil cihazlarda varsayılan olarak ok tuşlarını göster */
+.yon-tuslari {
+    display: flex; /* Butonları esnek kutu olarak hizala */
+    flex-direction: column; /* Dikey sıralama */
+    align-items: center; /* Yatayda ortala */
+    gap: 10px; /* Butonlar arası boşluk */
+    margin-top: 20px; /* Labirentten biraz boşluk bırak */
+    width: fit-content; /* İçeriği kadar genişlik */
+    margin-left: auto; /* Yatayda ortalamak için */
+    margin-right: auto; /* Yatayda ortalamak için */
+}
+
+.yon-tuslari div { /* İçteki div (sol, aşağı, sağ okları içeren) */
+    display: flex; /* İçindeki ok butonlarını yan yana hizala */
+    gap: 10px; /* Ok butonları arası boşluk */
+}
+
+.yon-tuslari button {
+    /* Mevcut tema değişkenlerini kullanarak buton stilleri */
+    background-color: var(--primary-btn-bg); /* Örneğin: var(--primary-btn-bg) */
+    color: var(--primary-btn-text); /* Örneğin: var(--primary-btn-text) */
+    border: none;
+    padding: 15px 20px; /* Daha büyük tıklama alanı */
+    border-radius: 50%; /* Yuvarlak butonlar */
+    font-size: 1.5em; /* Büyük ok işaretleri */
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.yon-tuslari button:hover {
+    background-color: var(--primary-btn-hover-bg); /* Örneğin: var(--primary-btn-hover-bg) */
+    transform: translateY(-2px);
+}
+
+.yon-tuslari button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* MEDYA SORGUSU: Bilgisayar ekranları için ok tuşlarını gizle */
+@media (min-width: 768px) { /* Genişliği 768px ve daha büyük olan ekranlar için */
+    .yon-tuslari {
+        display: none; /* Ok tuşlarını tamamen gizle */
+    }
+}
+
+/* MEDYA SORGUSU: Mobil ekranlar için ok tuşlarını göster (Opsiyonel ama açıkça belirtmek iyi) */
+@media (max-width: 767px) { /* Genişliği 767px ve daha küçük olan ekranlar için */
+    .yon-tuslari {
+        display: flex; /* Ok tuşlarını göster */
+    }
+}
